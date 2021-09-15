@@ -1,1 +1,83 @@
+- name: caddy
+  gather_facts: false
+  hosts: ansibletarget
+
+  tasks:
+    - name: Remove nginux from the VM
+      block:
+        - name: Get the nginx status
+          shell: "systemctl status nginx | grep active | grep -v grep"
+          register: nginx_status
+        - name: Stop nginx process
+          shell: "systemctl stop nginx"
+          register: nginx_status
+          when: '"running" in nginx_status.stdout'
+      tags:
+        - stop_nginx
+
+    - name: Add caddy from the VM if it is not present
+      block:
+        - name: Get the caddy status
+          shell: "systemctl status caddy"
+          register: caddy_status
+          ignore_errors: True
+        - name: Adding caddy...   
+          block:
+            - name: Install caddy dependencies...   
+              block:
+                - name: Install debian-keyring
+                  apt:
+                    name: debian-keyring
+                    state: present
+                - name: Install debian-archive-keyring      
+                  apt:
+                    name: debian-archive-keyring
+                    state: present
+                - name: Install apt-transport-https
+                  apt:
+                    name: apt-transport-https
+                    state: present
+            - name: Download key and debian.deb.txt file... 
+              block:
+                - name: Check if /etc/apt/trusted.gpg.d/caddy-testing.asc exists
+                  stat:
+                    path: /etc/apt/trusted.gpg.d/caddy-testing.asc
+                    register: file_status
+                - name: Create  /etc/apt/trusted.gpg.d/caddy-testing.asc if not exists
+                  file:
+                    path: /etc/apt/trusted.gpg.d/caddy-testing.asc
+                    state: touch
+                  when: file_status.stat.exists == False    
+                - name: Add an Apt signing key
+                  ansible.builtin.apt_key:
+                    url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
+                    state: present
+                - name: Check if /etc/apt/sources.list.d/caddy-testing.list exists
+                  stat:
+                    path: /etc/apt/sources.list.d/caddy-testing.list
+                    register: file_status
+                - name: Create /etc/apt/sources.list.d/caddy-testing.list if not exists
+                  file:
+                    path: /etc/apt/sources.list.d/caddy-testing.list
+                    state: touch
+                  when: file_status.stat.exists == False    
+                - name: Download debian.deb.txt file
+                  get_url:
+                    url: https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt
+                    dest: /etc/apt/sources.list.d/caddy-stable.list
+            - name: Updating all the apt packages...
+              block:
+                - name: Update all packages to their latest version
+                  apt:
+                    name: '*'
+                    state: latest
+            - name: Installing caddy...
+              block:
+              - name: Install caddy 
+                apt:
+                  name: caddy
+                  state: present
+          when: '"Unit caddy" in caddy_status.stderr'    
+      tags:
+        - install_caddy      
 
