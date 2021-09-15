@@ -1,8 +1,8 @@
 # Configure the AWS Provider
 provider "aws" {
   region  = "us-west-2"
-   access_key = "AKIAUV3KACVAV3LRJ6LC"
-  secret_key = "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"
+   access_key = ""
+  secret_key = ""
 }
 
 /* resource "aws_instance" "ansible-server" {
