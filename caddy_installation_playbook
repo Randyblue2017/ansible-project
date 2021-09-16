@@ -3,7 +3,7 @@
   hosts: ansibletarget
 
   tasks:
-    - name: Remove nginux from the VM
+    - name: Stop nginux service on VM
       block:
         - name: Get the nginx status
           shell: "systemctl status nginx | grep active | grep -v grep"
@@ -15,7 +15,7 @@
       tags:
         - stop_nginx
 
-    - name: Add caddy from the VM if it is not present
+    - name: Add caddy to the VM if it is not present
       block:
         - name: Get the caddy status
           shell: "systemctl status caddy"
@@ -52,8 +52,9 @@
                   ansible.builtin.apt_key:
                     url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
                     state: present
+                    keyring: /etc/apt/trusted.gpg.d/caddy-testing.asc
                 - name: Check if /etc/apt/sources.list.d/caddy-testing.list exists
-                  stat:
+                  state:
                     path: /etc/apt/sources.list.d/caddy-testing.list
                     register: file_status
                 - name: Create /etc/apt/sources.list.d/caddy-testing.list if not exists
@@ -80,4 +81,3 @@
           when: '"Unit caddy" in caddy_status.stderr'    
       tags:
         - install_caddy      
-
