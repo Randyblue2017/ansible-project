@@ -78,6 +78,7 @@
                 apt:
                   name: caddy
                   state: present
-          when: '"Unit caddy" in caddy_status.stderr'    
+          when: '"Unit caddy.service could not be found" in caddy_status.stderr'    
       tags:
-        - install_caddy      
+        - install_caddy     
+
