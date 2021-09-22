@@ -3,7 +3,7 @@
   hosts: '{{ target }}'
 
   tasks:
-    - name: Remove nginux from the VM
+    - name: Stop nginux from the VM
       block:
         - name: Get the nginx status
           shell: "systemctl status nginx | grep active | grep -v grep"
