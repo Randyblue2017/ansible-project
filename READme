@@ -24,3 +24,123 @@ $ansible-playbook caddy_newupdate.yml --extra-vars "target=hostvm2 caddy_file=ca
 34.219.94.72 ansible_user=root url1=www.amazon.com url2=google.com
 #ansible_ssh_private_key_file=/home/ubuntu/.
 #ssh/id_ed25519
+
+
+
+Write a ansible play to do the below task:
+
+1- Identify which vms are using caddy and which are using nginx
+2- replace nginx with caddy on outstanding vms
+3- verify caddy configuration files are consistent across all vms
+4- install caddy on vms that are using nginx 
+
+
+
+- name: Uninstall nginx 
+          apt:
+            name: nginx
+            state: absent
+          when: '"stopped" in nginx_status.stdout'
+
+
+ls -lrth /etc/apt/trusted.gpg.d/caddy-stable.asc
+From Sayed Ulfath Hussain to Everyone:  12:59 AM
+Ls -lrth etc/apt/sources.list.d/caddy-testing.list
+
+
+
+To Install Caddy manually run these commands:
+
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo tee /etc/apt/trusted.gpg.d/caddy-stable.asc
+https://caddyserver.com/docs/inst
+
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+
+
+Remove Caddy 
+
+rm -rf /etc/caddy
+rm -rf /var/cache/caddy
+rm -rf /var/lib/systemd/system/caddy.service 
+apt-get purge caddy caddy-common
+systemctl status caddy
+
+
+https://caddyserver.com/docs/install#debian-ubuntu-raspbian
+
+ansible-playbook ansibleproject.yml --tags "install_caddy"
+
+
+Thursday
+
+'"Unit caddy.service could not be found" in caddy_status.stderr'
+
+
+Unit caddy.service is masked
+
+
+Install and run NGINX on ubuntu
+
+$sudo apt-get update 
+$sudo apt install nginx 
+$systemctl status nginx
+
+** To check Nginx configuration files go to:
+$cd /etc/nginx    $ls    $ls conf.d/	$ls sites-enabled/	$ls sites-available/	
+
+
+How to uninstall Nginx
+
+$systemctl stop nginx
+$systemctl disable nginx.service
+Next remove all the nginx correspondance folders, including config folder, cache folders, log folders and the service folders 
+
+$rm -rf /etc/nginx
+$rm -rf /var/log/nginx
+$rm -rf /var/cache/nginx
+$rm -rf /var/lib/systemd/system/nginx.service    	(Remove nginx from system liberaries )
+$apt-get purge nginx nginx-common		(remove nginx using the purge command, it will remove all your nginx correspondance files. This will remove nginx completely from your system)
+Now run $systemctl status nginx			(This should say command can't be found)
+
+
+
+Command to run the playbook
+ip=<target_ip>
+ansible-playbook caddy.yml --extra-vars "target=$ip"
+
+
+Command to run the playbook:
+
+ansible-playbook caddy.yml --extra-vars "target=ansibletarget caddy_file=caddy_config.html url='www.google.com'" --tags "copy_caddy_html"
+
+
+Actual Playbook command:
+
+ ansible-playbook monday_caddy.yml --extra-vars "target=ansibletarget caddy_file=caddy.html "
+
+Command to just deploy Caddyfile on target hosts:
+
+ansible-playbook monday_caddy.yml --extra-vars "target=ansibletarget caddy_file=caddy.html " --tags "copy_caddy_html"
+
+
+Variable for adding url to caddyfile:
+
+[ansibletarget]
+18.237.28.163 ansible_user=root url=www.google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+
+***** For New Targetvm2
+
+ansible-playbook monday_caddy.yml --extra-vars "target=targetvm2 caddy_file=caddy.html " 
+
+
+What To Know
+To compare, run: diff file1 file2
+Show how they're different with: diff -q file1 file2
+Show how they're the same with: diff -s file1 file2
