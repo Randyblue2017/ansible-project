@@ -120,6 +120,8 @@ ansible-playbook caddy.yml --extra-vars "target=ansibletarget caddy_file=caddy_c
 
 Actual Playbook command:
 
+ansible-playbook caddy_newupdate.yml --extra-vars "target=hostvm2 caddy_file=caddyfile1 "
+
  ansible-playbook monday_caddy.yml --extra-vars "target=ansibletarget caddy_file=caddy.html "
 
 Command to just deploy Caddyfile on target hosts:
