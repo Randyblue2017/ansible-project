@@ -1,0 +1,26 @@
+# Command to run caddy_newthursday.yml playbook
+
+$ansible-playbook caddy_newupdate.yml --extra-vars "target=hostvm2 caddy_file=caddyfile1 "
+
+#Host file configuration 
+
+#[ansibletarget]
+#18.237. ansible_user=root url=www.google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+
+[testvm3]
+52.27 ansible_user=root url=www.google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+[hostvm]
+34.2 ansible_user=root url1=www.amazon.com url2=google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+[hostvm2]
+34.219.94.72 ansible_user=root url1=www.amazon.com url2=google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
