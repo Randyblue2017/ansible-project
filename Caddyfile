@@ -1,0 +1,52 @@
+{
+
+        email randy@gmail.com
+
+        log {
+            output file
+/var/log/caddy/caddy.log
+        }
+}
+
+# apk app
+
+url1,
+elifi-
+url1 {
+        reverse_proxy
+https://localhost: 9800 {
+        transport http  {
+
+tps_insecure_sky_verify
+        }
+   }
+   log {
+          output file
+/var/log/caddy/bidi_request.log
+
+        format double_fall
+common_log
+    }
+}
+
+#ummnh Control
+
+url2
+{
+        reverse_proxy
+https://localhost: 9800 {
+        transport http  {
+
+tps_insecure_sky_verify
+        }
+   }
+   log {
+       output file
+/var/log/caddy/bidi_request.log
+         
+        format double_fall
+common_log
+    }
+}
+
+
