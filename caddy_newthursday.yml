@@ -1,0 +1,78 @@
+- name: caddy
+  gather_facts: false
+  hosts: '{{ target }}'
+  vars:
+    - caddy_html_fpath_local: '{{ caddy_file }}'
+    - caddy_directory: /etc/caddy
+    - caddy_html_fpath_remote: /{{ caddy_directory }}/Caddyfile
+  tasks:
+    - name: Stop nginux from the VM
+      block:
+        - name: Get the nginx status
+          shell: "systemctl status nginx | grep active | grep -v grep"
+          register: nginx_status
+        - name: Stop nginx process
+          shell: "systemctl stop nginx"
+          register: nginx_status
+          when: '"running" in nginx_status.stdout'
+      tags:
+        - stop_nginx
+
+    - name: Add caddy from the VM if it is not present
+      block:
+        - name: Get the caddy status
+          shell: "systemctl status caddy"
+          register: caddy_status
+          ignore_errors: True
+        - name: Adding caddy...   
+          block:
+            - name: Installing caddy dependencies...   
+              shell: "apt install -y debian-keyring debian-archive-keyring apt-transport-https"
+            - name: Downloading the key...
+              shell: "curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo tee /etc/apt/trusted.gpg.d/caddy-stable.asc"
+            - name: Downloading the debian.deb.txt...
+              shell: "curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list"
+            - name: Updating all the apt packages...
+              shell: "apt update"
+            - name: Installing caddy...
+              shell: "apt install caddy"
+          when: '"Unit caddy.service could not be found" in caddy_status.stderr or "Unit caddy.service is masked" in caddy_status.stdout'    
+      tags:
+        - install_caddy
+        
+    - name: Configure caddy.html
+      block:
+        - name: Check if '{{ caddy_directory }}' directory exists
+          stat: 
+            path: '{{ caddy_directory }}'
+          register: directory_status
+        - name: Create '{{ caddy_directory }}' directoruy if it dosen't exists
+          file:
+            path: '{{ caddy_directory }}'
+            state: directory
+          when: directory_status.stat.exists == False
+        - name: Register content of caddy.html on local
+          command: cat '{{ caddy_html_fpath_local }}'
+          register: caddy_html_local_output
+          delegate_to: localhost
+        - name: Register content of caddy.html on remote
+          command: cat '{{ caddy_html_fpath_remote }}'
+          register: caddy_html_remote_output
+          ignore_errors: True
+        - name: Sync local file to remote one if not same
+          copy:
+            src: '{{ caddy_html_fpath_local }}'
+            dest: '{{ caddy_html_fpath_remote }}'
+          when: caddy_html_local_output.stdout != caddy_html_remote_output.stdout
+        - name: Replace URL 1
+          replace:
+            path: '{{ caddy_html_fpath_remote }}'
+            regexp: 'url1'
+            replace: '{{ url1 }}'
+        - name: Replace URL 2
+          replace:
+            path: '{{ caddy_html_fpath_remote }}'
+            regexp: 'url2'
+            replace: '{{ url2 }}'
+      tags:
+        - copy_caddy_file  
