@@ -141,12 +141,42 @@ Variable for adding url to caddyfile:
 #ansible_ssh_private_key_file=/home/ubuntu/.
 #ssh/id_ed25519
 
+#Host File 2    (You can deploy different Caddyfile on seperate vms)
+
+#[ansibletarget]
+#18.237.28.163 ansible_user=root url=www.google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+
+[testvm3]
+52.27.186.16 ansible_user=root url=www.google.com
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+[hostvm3]
+54.245.52.249 ansible_user=root url1=www.randy@trainings.com caddy_file=caddyfile url2=domain.com
+34.211.51.215 ansible_user=root url1=www.amazon.com url2=google.com caddy_file=caddyfile1
+
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
+
+[hostvm2]
+34.211.51.215 ansible_user=root url1=www.amazon.com url2=google.com
+
+#ansible_ssh_private_key_file=/home/ubuntu/.
+#ssh/id_ed25519
 
 
 
-***** For New Targetvm2
 
-ansible-playbook monday_caddy.yml --extra-vars "target=targetvm2 caddy_file=caddy.html " 
+***** For New Targetvm3
+
+#Command to run if Caddyfile is place in Host file:
+
+$ansible-playbook caddy_newupdate.yml --extra-vars "target=hostvm3"
+
+$ansible-playbook monday_caddy.yml --extra-vars "target=targetvm2 caddy_file=caddy.html " 
 
 
 What To Know
