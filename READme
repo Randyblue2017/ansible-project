@@ -78,6 +78,21 @@ sudo rm /etc/apt/sources.list.d/caddy-stable.list
 rm -rf /etc/apt/trusted.gpg.d/caddy-stable.asc
 cat /etc/apt/trusted.gpg.d/caddy-stable.asc
 
+**2
+Remove Caddy 
+
+rm -rf /etc/caddy
+rm -rf /var/cache/caddy
+rm -rf /var/lib/systemd/system/caddy.service 
+apt-get purge caddy caddy-common
+systemctl status caddy
+
+sudo apt-get --purge remove caddy
+sudo apt-get purge --auto-remove caddy
+sudo rm /etc/apt/sources.list.d/caddy-stable.list
+rm -rf /etc/apt/trusted.gpg.d/caddy-stable.asc
+cat /etc/apt/trusted.gpg.d/caddy-stable.asc
+
 
 https://caddyserver.com/docs/install#debian-ubuntu-raspbian
 
