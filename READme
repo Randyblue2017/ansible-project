@@ -72,6 +72,12 @@ rm -rf /var/lib/systemd/system/caddy.service
 apt-get purge caddy caddy-common
 systemctl status caddy
 
+sudo apt-get --purge remove caddy
+sudo apt-get purge --auto-remove caddy
+sudo rm /etc/apt/sources.list.d/caddy-stable.list
+rm -rf /etc/apt/trusted.gpg.d/caddy-stable.asc
+cat /etc/apt/trusted.gpg.d/caddy-stable.asc
+
 
 https://caddyserver.com/docs/install#debian-ubuntu-raspbian
 
@@ -186,3 +192,56 @@ What To Know
 To compare, run: diff file1 file2
 Show how they're different with: diff -q file1 file2
 Show how they're the same with: diff -s file1 file2
+
+
+Commands to COPY A FILE FROM ONE DIRECTORY TO ANOTHER directory IN A DIFFERENT PATH/ Command to copy one directory from a different path to anther directory in a different path
+
+
+To make a copy of a file called file.doc in the current directory as newfile.doc, enter:
+$ cp file.doc newfile.doc
+$ ls -l *.doc
+
+
+If backup is located in /home/project, enter:
+$ cp main.c demo.h libc. /home/project backup
+
+exp.  (To copy multiple files)
+
+$cp readme hosts /Users/randolph.nyepanh/projects/ansible
+
+
+
+
+To copy a directory, you need to add the -r (or -R) flag—which is shorthand for --recursive:
+$ ls directory-1
+a.txt
+
+$ cp -r directory-1 directory-2
+
+$ ls
+directory-1          directory-2
+
+$ ls directory-2
+a.txt
+
+
+
+Git Commands
+
+$git pull origin master —rebates
+$git add .
+$git status or gst
+$git commit-m “”
+$git push origin HEAD:refs/for/master 
+
+
+add a file named .gitattributes to ops/ansible/secure
+
+* filter=git-crypt diff=git-crypt
+.gitattributes !filter !diff
+
+
+git commit --amend --no-edit
+
+
+https://gist.github.com/kevin-smets/8568070			(To setup Item and zsh o mac)
