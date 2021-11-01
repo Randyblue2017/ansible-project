@@ -5,27 +5,27 @@ provider "aws" {
   secret_key = ""
 }
 
-/* resource "aws_instance" "ansible-server" {
-  ami           = "ami-03d5c68bab01f3496"
+/* resource "aws_instance" "ansi" {
+  ami           = "ami-0"
   instance_type = "t2.micro"
   tags = {
     Name = "ansiblevm"
   }
 }
 
-resource "aws_instance" "ansibleserver" {
-  ami           = "ami-03d5c68bab01f3496"
+resource "aws_instance" "ansib" {
+  ami           = "ami-03d5"
   instance_type = "t2.micro"
   tags = {
-    Name = "jenkinvmubuntu"
+    Name = "jenkin"
   }
 }
 
 resource "aws_instance" "ubuntuserver" {
-  ami           = "ami-03d5c68bab01f3496"
+  ami           = "ami-03d"
   instance_type = "t2.micro"
   tags = {
-    Name = "ansibletargetvm"
+    Name = "ansiblet"
   }
 }
  */
@@ -39,7 +39,7 @@ resource "aws_instance" "ubuntuserver" {
 resource "aws_vpc" "projectvpc2" {
   cidr_block = "10.1.0.0/16"
   tags = {
-    Name = "ansible-project-vpc2"
+    Name = "ansible-project-vpc"
   }
 }
 
@@ -173,11 +173,11 @@ resource "aws_eip" "ansibleproject-eip" {
 
 # 9. Create ubuntu server and install/enable apaches2
 
-resource "aws_instance" "ansible-server" {
-  ami           = "ami-03d5c68bab01f3496"
+resource "aws_instance" "ansible" {
+  ami           = "ami-0"
   instance_type = "t2.micro"
   availability_zone = "us-west-2a"
-  key_name = "Ansible-key"
+  key_name = "Ansi"
   
   network_interface {
       device_index = 0
@@ -208,10 +208,10 @@ resource "aws_instance" "ansible-server" {
 
 
 resource "aws_instance" "ansibleserver" {
-  ami           = "ami-03d5c68bab01f3496"
+  ami           = "ami-03d5c"
   instance_type = "t2.micro"
   availability_zone = "us-west-2a"
-  key_name = "Ansible-key"
+  key_name = "Ansib"
   
  /*  network_interface {
       device_index = 0
@@ -219,15 +219,15 @@ resource "aws_instance" "ansibleserver" {
   } */
 
   tags = {
-    Name = "jenkinvmubuntu"
+    Name = "jenkin"
   }
 }
 
-resource "aws_instance" "ubuntuserver" {
-  ami           = "ami-03d5c68bab01f3496"
+resource "aws_instance" "ubuntu" {
+  ami           = "ami-03d5c6"
   instance_type = "t2.micro"
   availability_zone = "us-west-2a"
-  key_name = "Ansible-key"
+  key_name = "A"
 
   /* network_interface {
       device_index = 0
@@ -235,6 +235,6 @@ resource "aws_instance" "ubuntuserver" {
   } */
 
   tags = {
-    Name = "ansibletargetvm"
+    Name = "ansibleta"
   }
 }
